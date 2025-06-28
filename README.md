@@ -6,7 +6,7 @@
 ### Lets start deploying Hostart App
 
 <ul>
-<li><a title="Deployment of Amazon Prime App in Kubernetes using Github+Jenkins+Sonarqube+npm+nodejs+trivy+docker+Terraform+Grafana+SSL" href="https://stardistributors.co.uk/devops/devops_tools/projects/amazon_prime/Amazon_prime1.jpg" target="_blank" rel="noopener"><img src="https://stardistributors.co.uk/devops/devops_tools/projects/disney_hotstar/disney_hotstar1.jpg" alt="" width="644" height="352" /></a></li>
+<li><a title="Deployment of Amazon Prime App in Kubernetes using Github+Jenkins+Sonarqube+npm+nodejs+trivy+docker+Terraform+Grafana+SSL" href="https://stardistributors.co.uk/devops/devops_tools/projects/amazon_prime/Amazon_prime1.jpg" target="_blank" rel="noopener"><img src="https://stardistributors.co.uk/devops/devops_tools/projects/amazon_prime/Amazon_prime1.jpg" alt="" width="644" height="352" /></a></li>
 <li>Tools &amp; Services used:
 <ul>
 <li>
