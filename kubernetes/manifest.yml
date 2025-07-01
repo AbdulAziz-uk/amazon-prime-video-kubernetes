@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: amazon-prime-video-container
-        image: aseemakram19/amazon-prime-video
+        image: aziz27uk/amazon-prime
         ports:
         - containerPort: 3000
 ---
@@ -26,7 +26,7 @@ kind: Service
 metadata:
   name: amazon-prime-video-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: amazon-prime-video
   ports:
