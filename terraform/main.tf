@@ -86,11 +86,11 @@ resource "aws_instance" "monitoring-server" {
   subnet_id = aws_subnet.Public-Subnet.id
   vpc_security_group_ids = [aws_security_group.star-SG.id]
   tags = {
-    Name = "monitoring-server"
+    Name = "monitoring_server"
   }
 }
 
 resource "aws_eip" "web-IP" {
-  instance = aws_instance.monitoring-server.id
+  instance = aws_instance.monitoring_server.id
  
 }
