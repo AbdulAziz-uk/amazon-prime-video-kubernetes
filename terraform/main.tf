@@ -14,38 +14,83 @@ provider "aws" {
   secret_key = var.secret_key
 }
 
-# create security group for the ec2 instance
-resource "aws_security_group" "ec2_security_group" {
-  name        = "ec2 security group"
-  description = "allow access on ports 22"
+resource "aws_vpc" "VPC1" {
+ cidr_block = "10.0.0.0/16"
+ tags = {
+ Name = "star-VPC1"
+ }
+}
 
-  # allow access on port 22
-  ingress {
-    description = "ssh access"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+resource "aws_subnet" "Public-Subnet" {
+ vpc_id  = aws_vpc.VPC1.id
+ cidr_block = "10.0.1.0/24"
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = -1
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+ tags = {
+ Name = "Public-Subnet"
+ }
+}
+
+resource "aws_security_group" "star-SG" {
+  name        = "star-SG"
+  description = "Security Group to allow/deny traffic"
+  vpc_id      = aws_vpc.VPC1.id
 
   tags = {
-    Name = "Monitoring server security group"
+    Name = "star-SG"
   }
 }
 
-resource "aws_instance" "Monitoring_server" {
-ami = "ami-044415bb13eee2391"  
-instance_type = "t2.medium"
-security_groups = [aws_security_group.ec2_security_group.name]
-key_name = var.key_name
-tags = {
-  Name: var.instance_name
+resource "aws_vpc_security_group_ingress_rule" "Allow_22_Inbound_ipv4" {
+  security_group_id = aws_security_group.star-SG.id
+  cidr_ipv4         = aws_vpc.VPC1.cidr_block
+  from_port         = 22
+  ip_protocol       = "tcp"
+  to_port           = 22
 }
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_Outbound_ipv4" {
+  security_group_id = aws_security_group.star-SG.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" 
+}
+
+resource "aws_internet_gateway" "star-GW" {
+  vpc_id = aws_vpc.VPC1.id
+
+  tags = {
+    Name = "Star-Gateway"
+  }
+}
+
+resource "aws_route_table" "star-RT" {
+  vpc_id = aws_vpc.VPC1.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.star-GW.id
+  }
+
+    tags = {
+    Name = "estar-RoutTable"
+  }
+}
+resource "aws_route_table_association" "IGW-RT-Assoc" {
+  subnet_id      = aws_subnet.Public-Subnet.id
+  route_table_id = aws_route_table.star-RT.id
+}
+
+resource "aws_instance" "monitoring-server" {
+  ami           = "ami-0e8d228ad90af673b"
+  instance_type = "t2.micro"
+  key_name = "keypair1"
+  subnet_id = aws_subnet.Public-Subnet.id
+  vpc_security_group_ids = [aws_security_group.star-SG.id]
+  tags = {
+    Name = "monitoring-server"
+  }
+}
+
+resource "aws_eip" "web-IP" {
+  instance = aws_instance.monitoring-server.id
+ 
 }
