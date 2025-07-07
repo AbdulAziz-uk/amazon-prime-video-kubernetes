@@ -79,7 +79,7 @@ resource "aws_route_table_association" "IGW-RT-Assoc" {
   route_table_id = aws_route_table.star-RT.id
 }
 
-resource "aws_instance" "monitoring-server" {
+resource "aws_instance" "monitoring_server" {
   ami           = "ami-0e8d228ad90af673b"
   instance_type = "t2.micro"
   key_name = "keypair1"
